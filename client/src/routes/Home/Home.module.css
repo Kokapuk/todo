@@ -1,0 +1,40 @@
+.logout {
+  position: absolute;
+  top: 0;
+  height: min-content;
+  right: 15%;
+  background-color: transparent;
+  text-decoration: underline;
+  color: white;
+  font-size: 18px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.card-container {
+  width: 60%;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-enter {
+  opacity: 0;
+}
+
+.task-enter-active {
+  opacity: 1;
+  translate: -15px;
+}
+
+.task-exit {
+  opacity: 1;
+  translate: -15px;
+}
+
+.task-exit-active {
+  opacity: 0;
+}

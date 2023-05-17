@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  transition: 200ms all;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.check-label {
+  display: flex;
+  gap: 18px;
+  font-size: 18px;
+  align-items: center;
+  color: #5a5a5a;
+  cursor: pointer;
+  transition: 200ms all;
+}
+
+.check-label.checked {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.delete {
+  background-color: transparent;
+  color: var(--red);
+  cursor: pointer;
+  height: 25px;
+  transition: 200ms all;
+}
+
+.delete:hover {
+  scale: 1.1;
+}
+
+.delete:active {
+  scale: 0.9;
+}
+
+.delete-enter {
+  opacity: 0;
+  scale: 0.8;
+  rotate: -180deg;
+}
+
+.delete-enter-active {
+  opacity: 1;
+  scale: 1;
+  rotate: 0;
+}
+
+.delete-exit {
+  opacity: 1;
+  scale: 1;
+}
+
+.delete-exit-active {
+  opacity: 0;
+  scale: 0.8;
+}

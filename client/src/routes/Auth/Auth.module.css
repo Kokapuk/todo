@@ -1,0 +1,47 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.input {
+  font-size: 18px;
+  padding: 10px 15px;
+  width: 400px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  transition: 200ms all;
+}
+
+.input:hover,
+.input:focus {
+  border: 1px solid var(--red);
+}
+
+.submit {
+  background-color: transparent;
+  color: var(--red);
+  font-size: 18px;
+  cursor: pointer;
+  transition: 200ms all;
+  padding: 15px;
+}
+
+.submit:hover {
+  color: white;
+  background-color: var(--red);
+  border-radius: 5px;
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.error {
+  color: var(--red);
+}
+
+.alternative-auth {
+  color: var(--red);
+}
