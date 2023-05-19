@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  justify-content: space-between;
   transition: 200ms all;
   padding: 5px 10px;
   border-radius: 8px;
@@ -21,20 +20,29 @@
   opacity: 0.5;
 }
 
-.delete {
+.button {
   background-color: transparent;
   color: var(--red);
   cursor: pointer;
-  height: 25px;
+  height: 35px;
   transition: 200ms all;
+  margin-left: auto;
+  margin-right: 15px;
+  padding: 5px;
+  border-radius: 5px;
 }
 
-.delete:hover {
+.button:hover {
   scale: 1.1;
 }
 
-.delete:active {
+.button:active {
   scale: 0.9;
+}
+
+.button__pinned {
+  background-color: var(--red);
+  color: white;
 }
 
 .delete-enter {

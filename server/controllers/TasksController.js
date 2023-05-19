@@ -21,7 +21,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const tasks = await TaskModel.find({ user: req.userId }).sort({ createdAt: -1 }).exec();
+    const tasks = await TaskModel.find({ user: req.userId }).sort({ pinned: -1, createdAt: -1 }).exec();
 
     res.json(tasks);
   } catch (err) {
@@ -61,6 +61,7 @@ const update = async (req, res) => {
       {
         text: req.body.text,
         completed: req.body.completed,
+        pinned: req.body.pinned,
       },
       { returnDocument: 'after' }
     );

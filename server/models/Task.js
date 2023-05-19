@@ -15,6 +15,10 @@ const TaskSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    pinned: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -1,16 +1,16 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Task from '../../components/Task/Task';
 import TaskForm from '../../components/TaskForm/TaskForm';
-import { ITask, IUser } from '../../types';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import styles from './Home.module.css';
 import useAuth from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
-import classNames from 'classnames';
+import { ITask, IUser } from '../../types';
 import axios from '../../utils/axios';
+import styles from './Home.module.css';
 
 const Home = () => {
   const [tasks, setTasks] = useState<ITask[]>([]);
+  const [sortedTasks, setSortedTasks] = useState<ITask[]>([]);
   const [token, setToken] = useAuth();
   const [me, setMe] = useState<IUser | null>(null);
 
@@ -46,6 +46,27 @@ const Home = () => {
     fetchData();
   }, [token]);
 
+  useEffect(() => {
+    const sortedByCreationDate = [...tasks].sort((a, b) => {
+      const aCreatedAt = new Date(a.createdAt).getTime();
+      const bCreatedAt = new Date(b.createdAt).getTime();
+
+      return bCreatedAt - aCreatedAt;
+    });
+
+    const sortedByPinned = sortedByCreationDate.sort((a, b) => {
+      if (a.pinned == b.pinned) {
+        return 0;
+      } else if (a.pinned) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    setSortedTasks(sortedByPinned);
+  }, [tasks]);
+
   const createNewTask = async (task: ITask) => {
     let doc: ITask | null = null;
 
@@ -56,14 +77,14 @@ const Home = () => {
       return setToken(null);
     }
 
-    setTasks((prev) => [{ _id: doc!._id, text: doc!.text, completed: false }, ...prev]);
+    setTasks((prev) => [{ _id: doc!._id, text: doc!.text, completed: false, pinned: false, createdAt: doc!.createdAt }, ...prev]);
   };
 
-  const setTaskChecked = async (id: string, completed: boolean) => {
+  const updateTask = async (id: string, updatedTask: { completed?: boolean; pinned?: boolean }) => {
     let doc: ITask | null = null;
 
     try {
-      doc = (await axios.patch(`/tasks/${id}`, { completed: completed }, { headers: { Authorization: `Bearer ${token}` } })).data;
+      doc = (await axios.patch(`/tasks/${id}`, updatedTask, { headers: { Authorization: `Bearer ${token}` } })).data;
     } catch (error) {
       console.log(error);
       return setToken(null);
@@ -72,7 +93,7 @@ const Home = () => {
     setTasks((prev) => {
       return prev.map((task) => {
         if (task._id == id) {
-          task = { ...task, completed: doc!.completed };
+          task = { ...task, completed: doc!.completed, pinned: doc!.pinned };
         }
 
         return task;
@@ -106,7 +127,7 @@ const Home = () => {
         <h1>Tasks</h1>
         <TaskForm createNewTask={createNewTask} />
         <TransitionGroup className={styles['task-list']}>
-          {tasks.map((task) => {
+          {sortedTasks.map((task) => {
             return (
               <CSSTransition
                 key={task._id}
@@ -119,7 +140,8 @@ const Home = () => {
                 }}>
                 <Task
                   task={task}
-                  setChecked={(checked) => setTaskChecked(task._id, checked)}
+                  setCompleted={(completed) => updateTask(task._id, { completed })}
+                  setPinned={(pinned) => updateTask(task._id, { pinned })}
                   deleteTask={() => deleteTask(task._id)}
                 />
               </CSSTransition>
